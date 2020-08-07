@@ -1,9 +1,11 @@
-For Science is a 46 key ortholinear split keyboard PCB with a 3 key thumb cluster.
+*For Science* is a 46 key ortholinear split keyboard PCB with a 3 key thumb cluster.
 
-The goal of this project is to build a usable split keyboard with a PCB case within the 100x100mm cheap PCB size limit offered by some PCB manufactuers. Designed to be easy to build, it only supports serial communication over a TRRS cable and no LED support. The PCB is reversible, meaning that you need two of the same PCB to create a full keyboard.
+The goal of this project is to build a usable split keyboard with a PCB case within the 100x100mm cheap PCB size limit offered by some PCB manufacturers. Designed to be easy to build, it only supports serial communication over a TRRS cable and no LED support. The PCB is reversible, meaning that you need two of the same PCB to create a full keyboard.
 
 ![Final assembled keyboard](https://i.imgur.com/fjnTkB1.jpg)
+
 ![PCB render from KiCad](./pcb.png)
+
 ![PCBs in white and green](https://imgur.com/LX8n0xE.jpg)
 
 # Bill of Materials (BOM)
@@ -21,11 +23,11 @@ The goal of this project is to build a usable split keyboard with a PCB case wit
 
 # Ordering PCBs
 
-PCBs can be manufactuered by a variety of online PCB fabricators, some have special offers for PCBs under 100mm square, so shop around. You can use [PCBShopper](https://pcbshopper.com/) to search for the best price.
+PCBs can be manufactured by a variety of online PCB fabricators, some have special offers for PCBs under 100mm square, so shop around. You can use [PCBShopper](https://pcbshopper.com/) to search for the best price.
 
-The 3 zip files in the gerber directory contain the gerber files your fabricator will need to make the main PCB [for-science-pcb.zip](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-pcb.zip) and the plate [for-science-plate.zip](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-plate.zip) and base  [for-science-base.zip](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-base.zip) PCBs.
+The 3 ZIP files in the */gerber* directory contain the Gerber files your fabricator will need to make [the main PCB (for-science-pcb.zip)](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-pcb.zip), [the plate (for-science-plate.zip)](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-plate.zip) and [the base PCB (for-science-base.zip)](https://github.com/peej/for-science-keyboard/blob/master/gerber/for-science-base.zip).
 
-When uploading the gerber zip files, use the default PCB settings. The plate PCB thickness should be 1.6mm for the switches to snap into the plate securely.
+When uploading the Gerber ZIP files, use the default PCB settings. The plate PCB thickness should be 1.6mm for the switches to snap into the plate securely.
 
 # Construction
 
