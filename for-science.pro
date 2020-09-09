@@ -1,6 +1,6 @@
-update=2017 December 09, Saturday 10:00:45
+update=Wed 09 Sep 2020 01:57:16 PM CEST
 version=1
-last_client=kicad
+last_client=eeschema
 [pcbnew]
 version=1
 LastNetListRead=
@@ -27,37 +27,4 @@ NetIExt=net
 version=1
 [eeschema]
 version=1
-LibDir=/Users/pauljames/keyboard/atreus62/pcb
-[eeschema/libraries]
-LibName1=for-science-rescue
-LibName2=power
-LibName3=device
-LibName4=transistors
-LibName5=conn
-LibName6=linear
-LibName7=regul
-LibName8=74xx
-LibName9=cmos4000
-LibName10=adc-dac
-LibName11=memory
-LibName12=xilinx
-LibName13=microcontrollers
-LibName14=dsp
-LibName15=microchip
-LibName16=analog_switches
-LibName17=motorola
-LibName18=texas
-LibName19=intel
-LibName20=audio
-LibName21=interface
-LibName22=digital-audio
-LibName23=philips
-LibName24=display
-LibName25=cypress
-LibName26=siliconi
-LibName27=opto
-LibName28=atmel
-LibName29=contrib
-LibName30=valves
-LibName31=/Users/pauljames/atreus62/pcb/generic_kbd-cache
-LibName32=/Users/pauljames/atreus62/pcb/Atreus62-cache
+LibDir=

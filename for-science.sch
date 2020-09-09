@@ -1,38 +1,5 @@
-EESchema Schematic File Version 2
-LIBS:for-science-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:generic_kbd-cache
-LIBS:Atreus62-cache
-LIBS:for-science-cache
-EELAYER 25 0
+EESchema Schematic File Version 4
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -47,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L ARDUINO_PRO_MICRO-RESCUE-for-science U1
+L for-science-rescue:ARDUINO_PRO_MICRO-RESCUE-for-science U1
 U 1 1 59F62FDE
 P 2190 4030
 F 0 "U1" V 2290 3980 60  0000 C CNN
@@ -58,7 +25,7 @@ F 3 "" H 2040 4530 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX1:0
+L for-science-rescue:SWITCH_PUSH MX1:0
 U 1 1 59F64072
 P 4990 2480
 F 0 "MX1:0" H 5140 2590 50  0000 C CNN
@@ -69,7 +36,7 @@ F 3 "" H 4990 2480 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D7
+L for-science-rescue:DIODE D7
 U 1 1 59F640C2
 P 5290 2680
 F 0 "D7" H 5190 2630 40  0000 C CNN
@@ -80,7 +47,7 @@ F 3 "" H 5290 2680 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX1:1
+L for-science-rescue:SWITCH_PUSH MX1:1
 U 1 1 59F6414E
 P 5890 2480
 F 0 "MX1:1" H 6040 2590 50  0000 C CNN
@@ -91,7 +58,7 @@ F 3 "" H 5890 2480 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR01
+L power:VCC #PWR01
 U 1 1 59F642C0
 P 1590 3830
 F 0 "#PWR01" H 1590 3680 50  0001 C CNN
@@ -102,7 +69,7 @@ F 3 "" H 1590 3830 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L DIODE D8
+L for-science-rescue:DIODE D8
 U 1 1 59F64384
 P 6190 2680
 F 0 "D8" H 6090 2630 40  0000 C CNN
@@ -113,7 +80,7 @@ F 3 "" H 6190 2680 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX1:2
+L for-science-rescue:SWITCH_PUSH MX1:2
 U 1 1 59F643E1
 P 6790 2480
 F 0 "MX1:2" H 6940 2590 50  0000 C CNN
@@ -124,7 +91,7 @@ F 3 "" H 6790 2480 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX1:3
+L for-science-rescue:SWITCH_PUSH MX1:3
 U 1 1 59F6444B
 P 7740 2480
 F 0 "MX1:3" H 7890 2590 50  0000 C CNN
@@ -135,7 +102,7 @@ F 3 "" H 7740 2480 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX1:4
+L for-science-rescue:SWITCH_PUSH MX1:4
 U 1 1 59F644B0
 P 8690 2480
 F 0 "MX1:4" H 8840 2590 50  0000 C CNN
@@ -146,7 +113,7 @@ F 3 "" H 8690 2480 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D9
+L for-science-rescue:DIODE D9
 U 1 1 59F64580
 P 7090 2680
 F 0 "D9" H 6990 2630 40  0000 C CNN
@@ -157,7 +124,7 @@ F 3 "" H 7090 2680 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D10
+L for-science-rescue:DIODE D10
 U 1 1 59F645D6
 P 8040 2680
 F 0 "D10" H 7940 2630 40  0000 C CNN
@@ -168,7 +135,7 @@ F 3 "" H 8040 2680 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D11
+L for-science-rescue:DIODE D11
 U 1 1 59F64620
 P 8990 2680
 F 0 "D11" H 8890 2630 40  0000 C CNN
@@ -179,7 +146,7 @@ F 3 "" H 8990 2680 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX0:0
+L for-science-rescue:SWITCH_PUSH MX0:0
 U 1 1 59F6594A
 P 4990 1730
 F 0 "MX0:0" H 5140 1840 50  0000 C CNN
@@ -190,7 +157,7 @@ F 3 "" H 4990 1730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D1
+L for-science-rescue:DIODE D1
 U 1 1 59F65951
 P 5290 1930
 F 0 "D1" H 5190 1880 40  0000 C CNN
@@ -201,7 +168,7 @@ F 3 "" H 5290 1930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX0:1
+L for-science-rescue:SWITCH_PUSH MX0:1
 U 1 1 59F65958
 P 5890 1730
 F 0 "MX0:1" H 6040 1840 50  0000 C CNN
@@ -212,7 +179,7 @@ F 3 "" H 5890 1730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D2
+L for-science-rescue:DIODE D2
 U 1 1 59F6595F
 P 6190 1930
 F 0 "D2" H 6090 1880 40  0000 C CNN
@@ -223,7 +190,7 @@ F 3 "" H 6190 1930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX0:2
+L for-science-rescue:SWITCH_PUSH MX0:2
 U 1 1 59F65966
 P 6790 1730
 F 0 "MX0:2" H 6940 1840 50  0000 C CNN
@@ -234,7 +201,7 @@ F 3 "" H 6790 1730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX0:3
+L for-science-rescue:SWITCH_PUSH MX0:3
 U 1 1 59F6596D
 P 7740 1730
 F 0 "MX0:3" H 7890 1840 50  0000 C CNN
@@ -245,7 +212,7 @@ F 3 "" H 7740 1730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX0:4
+L for-science-rescue:SWITCH_PUSH MX0:4
 U 1 1 59F65974
 P 8690 1730
 F 0 "MX0:4" H 8840 1840 50  0000 C CNN
@@ -256,7 +223,7 @@ F 3 "" H 8690 1730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D3
+L for-science-rescue:DIODE D3
 U 1 1 59F65982
 P 7090 1930
 F 0 "D3" H 6990 1880 40  0000 C CNN
@@ -267,7 +234,7 @@ F 3 "" H 7090 1930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D4
+L for-science-rescue:DIODE D4
 U 1 1 59F65989
 P 8040 1930
 F 0 "D4" H 7940 1880 40  0000 C CNN
@@ -278,7 +245,7 @@ F 3 "" H 8040 1930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D5
+L for-science-rescue:DIODE D5
 U 1 1 59F65990
 P 8990 1930
 F 0 "D5" H 8890 1880 40  0000 C CNN
@@ -289,7 +256,7 @@ F 3 "" H 8990 1930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX2:0
+L for-science-rescue:SWITCH_PUSH MX2:0
 U 1 1 59F6604B
 P 4990 3230
 F 0 "MX2:0" H 5140 3340 50  0000 C CNN
@@ -300,7 +267,7 @@ F 3 "" H 4990 3230 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D13
+L for-science-rescue:DIODE D13
 U 1 1 59F66052
 P 5290 3430
 F 0 "D13" H 5190 3380 40  0000 C CNN
@@ -311,7 +278,7 @@ F 3 "" H 5290 3430 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX2:1
+L for-science-rescue:SWITCH_PUSH MX2:1
 U 1 1 59F66059
 P 5890 3230
 F 0 "MX2:1" H 6040 3340 50  0000 C CNN
@@ -322,7 +289,7 @@ F 3 "" H 5890 3230 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D14
+L for-science-rescue:DIODE D14
 U 1 1 59F66060
 P 6190 3430
 F 0 "D14" H 6090 3380 40  0000 C CNN
@@ -333,7 +300,7 @@ F 3 "" H 6190 3430 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX2:2
+L for-science-rescue:SWITCH_PUSH MX2:2
 U 1 1 59F66067
 P 6790 3230
 F 0 "MX2:2" H 6940 3340 50  0000 C CNN
@@ -344,7 +311,7 @@ F 3 "" H 6790 3230 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX2:3
+L for-science-rescue:SWITCH_PUSH MX2:3
 U 1 1 59F6606E
 P 7740 3230
 F 0 "MX2:3" H 7890 3340 50  0000 C CNN
@@ -355,7 +322,7 @@ F 3 "" H 7740 3230 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX2:4
+L for-science-rescue:SWITCH_PUSH MX2:4
 U 1 1 59F66075
 P 8690 3230
 F 0 "MX2:4" H 8840 3340 50  0000 C CNN
@@ -366,7 +333,7 @@ F 3 "" H 8690 3230 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D15
+L for-science-rescue:DIODE D15
 U 1 1 59F66083
 P 7090 3430
 F 0 "D15" H 6990 3380 40  0000 C CNN
@@ -377,7 +344,7 @@ F 3 "" H 7090 3430 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D16
+L for-science-rescue:DIODE D16
 U 1 1 59F6608A
 P 8040 3430
 F 0 "D16" H 7940 3380 40  0000 C CNN
@@ -388,7 +355,7 @@ F 3 "" H 8040 3430 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D17
+L for-science-rescue:DIODE D17
 U 1 1 59F66091
 P 8990 3430
 F 0 "D17" H 8890 3380 40  0000 C CNN
@@ -399,7 +366,7 @@ F 3 "" H 8990 3430 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX3:1
+L for-science-rescue:SWITCH_PUSH MX3:1
 U 1 1 59F66261
 P 5890 3980
 F 0 "MX3:1" H 6040 4090 50  0000 C CNN
@@ -410,7 +377,7 @@ F 3 "" H 5890 3980 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D19
+L for-science-rescue:DIODE D19
 U 1 1 59F66268
 P 5290 4180
 F 0 "D19" H 5190 4130 40  0000 C CNN
@@ -421,7 +388,7 @@ F 3 "" H 5290 4180 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX3:2
+L for-science-rescue:SWITCH_PUSH MX3:2
 U 1 1 59F6626F
 P 6790 3980
 F 0 "MX3:2" H 6940 4090 50  0000 C CNN
@@ -432,7 +399,7 @@ F 3 "" H 6790 3980 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D20
+L for-science-rescue:DIODE D20
 U 1 1 59F66276
 P 6190 4180
 F 0 "D20" H 6090 4130 40  0000 C CNN
@@ -443,7 +410,7 @@ F 3 "" H 6190 4180 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX3:3
+L for-science-rescue:SWITCH_PUSH MX3:3
 U 1 1 59F6627D
 P 7740 3980
 F 0 "MX3:3" H 7890 4090 50  0000 C CNN
@@ -454,7 +421,7 @@ F 3 "" H 7740 3980 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SWITCH_PUSH MX3:4
+L for-science-rescue:SWITCH_PUSH MX3:4
 U 1 1 59F66284
 P 8690 3980
 F 0 "MX3:4" H 8840 4090 50  0000 C CNN
@@ -465,7 +432,7 @@ F 3 "" H 8690 3980 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D21
+L for-science-rescue:DIODE D21
 U 1 1 59F66299
 P 7090 4180
 F 0 "D21" H 6990 4130 40  0000 C CNN
@@ -476,7 +443,7 @@ F 3 "" H 7090 4180 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D22
+L for-science-rescue:DIODE D22
 U 1 1 59F662A0
 P 8040 4180
 F 0 "D22" H 7940 4130 40  0000 C CNN
@@ -487,7 +454,7 @@ F 3 "" H 8040 4180 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODE D23
+L for-science-rescue:DIODE D23
 U 1 1 59F662A7
 P 8990 4180
 F 0 "D23" H 8890 4130 40  0000 C CNN
@@ -502,7 +469,7 @@ NoConn ~ 2790 4830
 NoConn ~ 1590 4130
 NoConn ~ 1590 3330
 $Comp
-L GND #PWR02
+L power:GND #PWR02
 U 1 1 59F795FB
 P 1590 4630
 F 0 "#PWR02" H 1590 4380 50  0001 C CNN
@@ -549,7 +516,7 @@ Col3
 Text Label 8390 1380 2    60   ~ 0
 Col4
 $Comp
-L GND #PWR03
+L power:GND #PWR03
 U 1 1 59FA4C28
 P 2780 2860
 F 0 "#PWR03" H 2780 2610 50  0001 C CNN
@@ -560,7 +527,7 @@ F 3 "" H 2780 2860 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR04
+L power:VCC #PWR04
 U 1 1 59FA4D2C
 P 3180 2560
 F 0 "#PWR04" H 3180 2410 50  0001 C CNN
@@ -571,7 +538,7 @@ F 3 "" H 3180 2560 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Audio-Jack-4 J1
+L for-science-rescue:Audio-Jack-4 J1
 U 1 1 59FA3B42
 P 2980 2460
 F 0 "J1" H 2930 2540 50  0000 C CNN
@@ -582,7 +549,7 @@ F 3 "" H 3230 2560 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR05
+L power:GND #PWR05
 U 1 1 5A00C01A
 P 1700 2400
 F 0 "#PWR05" H 1700 2150 50  0001 C CNN
@@ -593,7 +560,7 @@ F 3 "" H 1700 2400 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Conn_01x01 TX0
+L for-science-rescue:Conn_01x01 TX0
 U 1 1 5A02CBEB
 P 1500 5300
 F 0 "TX0" H 1500 5400 50  0000 C CNN
@@ -604,7 +571,7 @@ F 3 "" H 1500 5300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x01 EXTRADATA1
+L for-science-rescue:Conn_01x01 EXTRADATA1
 U 1 1 5A02DF70
 P 2110 1490
 F 0 "EXTRADATA1" H 2110 1590 50  0000 C CNN
@@ -615,7 +582,7 @@ F 3 "" H 2110 1490 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Conn_01x01 RESET1
+L for-science-rescue:Conn_01x01 RESET1
 U 1 1 5A03811E
 P 1500 2780
 F 0 "RESET1" H 1500 2880 50  0000 C CNN
@@ -626,7 +593,7 @@ F 3 "" H 1500 2780 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x01 GROUND1
+L for-science-rescue:Conn_01x01 GROUND1
 U 1 1 5A038449
 P 1500 2400
 F 0 "GROUND1" H 1500 2500 50  0000 C CNN
@@ -641,11 +608,11 @@ NoConn ~ 1590 4730
 Wire Wire Line
 	3510 2660 3180 2660
 Wire Wire Line
-	3510 3330 3510 2660
+	3510 3330 3510 3100
 Wire Wire Line
 	2790 3330 3510 3330
 Wire Wire Line
-	3630 1490 2310 1490
+	3630 1490 2580 1490
 Wire Wire Line
 	3630 2460 3630 1490
 Wire Wire Line
@@ -676,16 +643,16 @@ Connection ~ 7440 2480
 Connection ~ 8390 2480
 Connection ~ 8390 3230
 Wire Wire Line
-	8390 1380 8390 4730
+	8390 1380 8390 1730
 Connection ~ 7440 3230
 Wire Wire Line
-	7440 1380 7440 4730
+	7440 1380 7440 1730
 Connection ~ 6490 3230
 Wire Wire Line
-	6490 1380 6490 4730
+	6490 1380 6490 1730
 Connection ~ 5590 3230
 Wire Wire Line
-	5590 1380 5590 3980
+	5590 1380 5590 1730
 Connection ~ 4690 2480
 Connection ~ 6190 4380
 Connection ~ 8040 4380
@@ -694,19 +661,19 @@ Connection ~ 6190 3630
 Connection ~ 8040 3630
 Connection ~ 7090 3630
 Wire Wire Line
-	4500 3630 8990 3630
+	4500 3630 5290 3630
 Connection ~ 6190 2130
 Connection ~ 8040 2130
 Connection ~ 7090 2130
 Wire Wire Line
-	4490 2130 8990 2130
+	4490 2130 5290 2130
 Connection ~ 6190 2880
 Connection ~ 8040 2880
 Connection ~ 7090 2880
 Wire Wire Line
-	4500 4380 8990 4380
+	4500 4380 5290 4380
 $Comp
-L SWITCH_PUSH MX3:0
+L for-science-rescue:SWITCH_PUSH MX3:0
 U 1 1 5A1B3633
 P 4990 3980
 F 0 "MX3:0" H 5140 4090 50  0000 C CNN
@@ -718,16 +685,16 @@ F 3 "" H 4990 3980 60  0000 C CNN
 $EndComp
 Connection ~ 4690 3230
 Wire Wire Line
-	4690 1380 4690 3980
+	4690 1380 4690 1730
 Connection ~ 5290 4380
 Wire Wire Line
-	4520 5130 8990 5130
+	4520 5130 7090 5130
 Text Label 4520 5130 2    60   ~ 0
 Row4
 Text Label 2790 3930 0    60   ~ 0
 Row4
 $Comp
-L SWITCH_PUSH MX4:2
+L for-science-rescue:SWITCH_PUSH MX4:2
 U 1 1 5A1B9CC8
 P 6790 4730
 F 0 "MX4:2" H 6940 4840 50  0000 C CNN
@@ -738,7 +705,7 @@ F 3 "" H 6790 4730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D26
+L for-science-rescue:DIODE D26
 U 1 1 5A1B9E4E
 P 7090 4930
 F 0 "D26" H 6990 4880 40  0000 C CNN
@@ -750,7 +717,7 @@ F 3 "" H 7090 4930 60  0001 C CNN
 $EndComp
 Connection ~ 7090 5130
 $Comp
-L SWITCH_PUSH MX4:3
+L for-science-rescue:SWITCH_PUSH MX4:3
 U 1 1 5A1BA104
 P 7740 4730
 F 0 "MX4:3" H 7890 4840 50  0000 C CNN
@@ -761,7 +728,7 @@ F 3 "" H 7740 4730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D27
+L for-science-rescue:DIODE D27
 U 1 1 5A1BA1E5
 P 8040 4930
 F 0 "D27" H 7940 4880 40  0000 C CNN
@@ -772,7 +739,7 @@ F 3 "" H 8040 4930 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L SWITCH_PUSH MX4:4
+L for-science-rescue:SWITCH_PUSH MX4:4
 U 1 1 5A1BA903
 P 8690 4730
 F 0 "MX4:4" H 8840 4840 50  0000 C CNN
@@ -783,7 +750,7 @@ F 3 "" H 8690 4730 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D28
+L for-science-rescue:DIODE D28
 U 1 1 5A1BA9EF
 P 8990 4930
 F 0 "D28" H 8890 4880 40  0000 C CNN
@@ -798,12 +765,12 @@ Connection ~ 7440 3980
 Connection ~ 6490 3980
 Connection ~ 8040 5130
 Wire Wire Line
-	4490 2880 8990 2880
+	4490 2880 5290 2880
 NoConn ~ 2790 4030
 NoConn ~ 2790 4730
 NoConn ~ 2790 3530
 $Comp
-L Audio-Jack-4 J2
+L for-science-rescue:Audio-Jack-4 J2
 U 1 1 5A2C08EE
 P 2330 2450
 F 0 "J2" H 2280 2530 50  0000 C CNN
@@ -814,7 +781,7 @@ F 3 "" H 2580 2550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR06
+L power:GND #PWR06
 U 1 1 5A2C0D53
 P 2130 2850
 F 0 "#PWR06" H 2130 2600 50  0001 C CNN
@@ -825,7 +792,7 @@ F 3 "" H 2130 2850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR07
+L power:VCC #PWR07
 U 1 1 5A2C0E06
 P 2530 2550
 F 0 "#PWR07" H 2530 2400 50  0001 C CNN
@@ -845,4 +812,80 @@ Wire Wire Line
 Wire Wire Line
 	2580 2450 2580 1490
 Connection ~ 2580 1490
+Wire Wire Line
+	5290 3630 6190 3630
+Wire Wire Line
+	5290 2880 6190 2880
+Wire Wire Line
+	5290 2130 6190 2130
+Wire Wire Line
+	8390 1730 8390 2480
+Wire Wire Line
+	7440 1730 7440 2480
+Wire Wire Line
+	6490 1730 6490 2480
+Wire Wire Line
+	5590 1730 5590 2480
+Wire Wire Line
+	4690 1730 4690 2480
+Wire Wire Line
+	5590 2480 5590 3230
+Wire Wire Line
+	6490 2480 6490 3230
+Wire Wire Line
+	7440 2480 7440 3230
+Wire Wire Line
+	8390 2480 8390 3230
+Wire Wire Line
+	8390 3230 8390 3980
+Wire Wire Line
+	7440 3230 7440 3980
+Wire Wire Line
+	6490 3230 6490 3980
+Wire Wire Line
+	5590 3230 5590 3980
+Wire Wire Line
+	4690 2480 4690 3230
+Wire Wire Line
+	6190 4380 7090 4380
+Wire Wire Line
+	8040 4380 8990 4380
+Wire Wire Line
+	7090 4380 8040 4380
+Wire Wire Line
+	6190 3630 7090 3630
+Wire Wire Line
+	8040 3630 8990 3630
+Wire Wire Line
+	7090 3630 8040 3630
+Wire Wire Line
+	6190 2130 7090 2130
+Wire Wire Line
+	8040 2130 8990 2130
+Wire Wire Line
+	7090 2130 8040 2130
+Wire Wire Line
+	6190 2880 7090 2880
+Wire Wire Line
+	8040 2880 8990 2880
+Wire Wire Line
+	7090 2880 8040 2880
+Wire Wire Line
+	4690 3230 4690 3980
+Wire Wire Line
+	5290 4380 6190 4380
+Wire Wire Line
+	7090 5130 8040 5130
+Wire Wire Line
+	8390 3980 8390 4730
+Wire Wire Line
+	7440 3980 7440 4730
+Wire Wire Line
+	6490 3980 6490 4730
+Wire Wire Line
+	8040 5130 8990 5130
+Wire Wire Line
+	3510 3100 3510 2660
+Wire Wire Line
+	2580 1490 2310 1490
 $EndSCHEMATC
