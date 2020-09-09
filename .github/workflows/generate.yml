@@ -7,12 +7,14 @@ on:
   push:
     branches: [ master, oseg ]
     paths:
+      - '.github/workflows/generate.yml'
       - '**.sch'
       - '**.kicad_pcb'
       - '**.kibot.yaml'
   pull_request:
     branches: [ master, oseg ]
     paths:
+      - '.github/workflows/generate.yml'
       - '**.sch'
       - '**.kicad_pcb'
       - '**.kibot.yaml'
@@ -34,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: ERC_Output
-        path: Fabrication
+        path: build
 
   DRC:
     runs-on: ubuntu-latest
@@ -52,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: DRC_Output
-        path: Fabrication
+        path: build
 
   FabSch:
     name: Schematic fabrication files
@@ -71,7 +73,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: FabSch_Output
-        path: Fabrication
+        path: build
 
   FabPCB:
     name: PCB fabrication files
@@ -90,5 +92,5 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: FabPCB_Output
-        path: Fabrication
+        path: build
 
