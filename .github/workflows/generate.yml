@@ -5,14 +5,14 @@ name: CI
 # but only for the master branch.
 on:
   push:
-    branches: [ master ]
+    branches: [ master, oseg ]
     paths:
       - '.github/workflows/generate.yml'
       - '**.sch'
       - '**.kicad_pcb'
       - '**.kibot.yaml'
   pull_request:
-    branches: [ master ]
+    branches: [ master, oseg ]
     paths:
       - '.github/workflows/generate.yml'
       - '**.sch'
