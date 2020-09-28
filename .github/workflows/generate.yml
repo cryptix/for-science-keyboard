@@ -30,7 +30,7 @@ jobs:
 
     - name: Run ERC
       run: |
-        test -f *.sch && make erc
+        [ -f *.sch ] && make erc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -48,7 +48,7 @@ jobs:
 
     - name: Run DRC
       run: |
-        test -f *.kicad_pcb && make drc
+        [ -f *.kicad_pcb ] && make drc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -67,7 +67,7 @@ jobs:
 
     - name: Run schematic stuff
       run: |
-        test -f *.sch && make sch_fab
+        [ -f *.sch ] && make sch_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -86,7 +86,7 @@ jobs:
 
     - name: Run PCB stuff
       run: |
-        test -f *.kicad_pcb && make pcb_fab
+        [ -f *.kicad_pcb ] && make pcb_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
