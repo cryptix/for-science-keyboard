@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name for-science-rescue)(type Legacy)(uri ${KIPRJMOD}/for-science-rescue.lib)(options "")(descr ""))
+)
