@@ -30,7 +30,8 @@ jobs:
 
     - name: Run ERC
       run: |
-        [ -f *.sch ] && make erc
+        [ "$(find . -type f -name '*.sch' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
+            && make erc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -48,7 +49,8 @@ jobs:
 
     - name: Run DRC
       run: |
-        [ -f *.kicad_pcb ] && make drc
+        [ "$(find . -type f -name '*.kicad_pcb' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
+            && make drc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -67,7 +69,8 @@ jobs:
 
     - name: Run schematic stuff
       run: |
-        [ -f *.sch ] && make sch_fab
+        [ "$(find . -type f -name '*.sch' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
+            && make sch_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -86,7 +89,8 @@ jobs:
 
     - name: Run PCB stuff
       run: |
-        [ -f *.kicad_pcb ] && make pcb_fab
+        [ "$(find . -type f -name '*.kicad_pcb' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
+            && make pcb_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
