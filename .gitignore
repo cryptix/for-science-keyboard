@@ -7,7 +7,7 @@
 *.000
 *.bak
 *.bck
-*.kicad_pcb-bak
+*.*-bak
 /fp-info-cache
 *~
 _autosave-*
