@@ -7,6 +7,7 @@ OUT_DIR=build
 
 define generate_pcb
 	echo "-- PCB fab. ($(1)) ..."; \
+	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.kicad_pcb' ! -path './build/*' \
 		| while read -r kicad_pcb; \
 	do \
@@ -29,6 +30,7 @@ all: erc_and_fab drc_and_fab
 
 erc:
 	echo "-- ERC ..."; \
+	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.sch' ! -path './build/*' \
 		| while read -r sch; \
 	do \
@@ -41,6 +43,7 @@ erc:
 
 drc:
 	echo "-- DRC ..."; \
+	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.kicad_pcb' ! -path './build/*' \
 		| while read -r kicad_pcb; \
 	do \
@@ -53,6 +56,7 @@ drc:
 
 sch_fab:
 	echo "-- Schema fab. ..."; \
+	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.sch' ! -path './build/*' \
 		| while read -r sch; \
 	do \
