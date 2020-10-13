@@ -29,9 +29,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run ERC
-      run: |
-        [ "$(find . -type f -name '*.sch' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
-            && make erc
+      run: make erc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -48,9 +46,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run DRC
-      run: |
-        [ "$(find . -type f -name '*.kicad_pcb' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
-            && make drc
+      run: make drc
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -68,9 +64,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run schematic stuff
-      run: |
-        [ "$(find . -type f -name '*.sch' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
-            && make sch_fab
+      run: make sch_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
@@ -88,9 +82,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run PCB stuff
-      run: |
-        [ "$(find . -type f -name '*.kicad_pcb' ! -path './build/*' 2> /dev/null | wc -l)" -gt 0 ] \
-            && make pcb_fab
+      run: make pcb_fab
 
     - name: Retrieve results
       uses: actions/upload-artifact@v1
