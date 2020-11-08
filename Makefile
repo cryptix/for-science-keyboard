@@ -15,9 +15,11 @@ define generate_pcb
 		base_path="$${kicad_pcb%.kicad_pcb}"; \
 		base_path="$${base_path#./}"; \
 		base_file="$$(echo "$$base_path" | tr '/' '-')"; \
+		config_file="$${base_file}.kibot.yaml"; \
 		out_dir="$(OUT_DIR)/$$base_path"; \
 		echo "Building PCB Fabrication files for '$$kicad_pcb' at '$$out_dir', skipping '$(1)' ..."; \
 		kibot $(DEBUG) --out-dir "$$out_dir" --board-file "$$kicad_pcb" --schematic "" --skip-pre $(1) \
+			--plot-config "$${config_file}" \
 			print_front print_bottom print_gnd print_power print_s1 print_s2 gerbers \
 			excellon_drill gerber_drills position step pcb_top_g pcb_bot_g pcb_top_b \
 			pcb_bot_b pcb_top_r pcb_bot_r; \
@@ -35,7 +37,12 @@ erc:
 		| while read -r sch; \
 	do \
 		echo "-- ERC for '$$sch' ..."; \
+		base_path="$${sch%.sch}"; \
+		base_path="$${base_path#./}"; \
+		base_file="$$(echo "$$base_path" | tr '/' '-')"; \
+		config_file="$${base_file}.kibot.yaml"; \
 		kibot $(DEBUG) --out-dir $(OUT_DIR) --schematic "$$sch" \
+			--plot-config "$${config_file}" \
 			--skip-pre run_drc --invert-sel; \
 		echo "--"; \
 	done; \
@@ -48,7 +55,12 @@ drc:
 		| while read -r kicad_pcb; \
 	do \
 		echo "-- DRC for '$$kicad_pcb' ..."; \
+		base_path="$${kicad_pcb%.kicad_pcb}"; \
+		base_path="$${base_path#./}"; \
+		base_file="$$(echo "$$base_path" | tr '/' '-')"; \
+		config_file="$${base_file}.kibot.yaml"; \
 		kibot $(DEBUG) --out-dir $(OUT_DIR) --board-file "$$kicad_pcb" \
+			--plot-config "$${config_file}" \
 			--skip-pre run_erc --invert-sel; \
 		echo "--"; \
 	done; \
@@ -61,7 +73,12 @@ sch_fab:
 		| while read -r sch; \
 	do \
 		echo "-- Schema fab. for '$$sch' ..."; \
+		base_path="$${sch%.sch}"; \
+		base_path="$${base_path#./}"; \
+		base_file="$$(echo "$$base_path" | tr '/' '-')"; \
+		config_file="$${base_file}.kibot.yaml"; \
 		kibot $(DEBUG) --out-dir $(OUT_DIR) --schematic "$$sch" \
+			--plot-config "$${config_file}" \
 			--skip-pre run_erc,run_drc print_sch bom_html bom_xlsx bom_csv; \
 		echo "--"; \
 	done
