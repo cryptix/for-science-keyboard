@@ -9,6 +9,12 @@
 DEBUG=
 OUT_DIR=build
 
+define init
+	set -o errexit; \
+	set -o nounset #; \
+	#set -o pipefail
+endef
+
 define generate_pcb
 	echo "-- PCB fab. ($(1)) ..."; \
 	mkdir -p "$(OUT_DIR)"; \
@@ -40,6 +46,7 @@ endef
 all: erc_and_fab drc_and_fab
 
 erc:
+	$(call init)
 	echo "-- ERC ..."; \
 	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.sch' ! -path './build/*' \
@@ -57,6 +64,7 @@ erc:
 	echo "-- ERC done."
 
 drc:
+	$(call init)
 	echo "-- DRC ..."; \
 	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.kicad_pcb' ! -path './build/*' \
@@ -82,6 +90,7 @@ drc:
 	echo "-- DRC done."
 
 sch_fab:
+	$(call init)
 	echo "-- Schema fab. ..."; \
 	mkdir -p "$(OUT_DIR)"; \
 	find . -type f -name '*.sch' ! -path './build/*' \
@@ -99,10 +108,12 @@ sch_fab:
 	echo "-- Schema fab. done."
 
 pcb_fab:
+	$(call init)
 	$(call generate_pcb,all)
 
 erc_and_fab: sch_fab erc
 
 drc_and_fab:
+	$(call init)
 	$(call generate_pcb,run_erc)
 
