@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Paul James <p.james@coolblue.nl>
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 *For Science* is a 46 key ortholinear split keyboard PCB with a 3 key thumb cluster.
 
 The goal of this project is to build a usable split keyboard with a PCB case

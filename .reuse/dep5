@@ -1,0 +1,9 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: for-science-keyboard
+Upstream-Contact: Paul James <p.james@coolblue.nl>
+Source: https://gitlab.com/peej/for-science-keyboard
+
+Files: *.pro *.kicad_pcb *.sch *.lib *.dcm *.png fp-info-cache sym-lib-table
+Copyright: Paul James <p.james@coolblue.nl>
+License: MIT
+

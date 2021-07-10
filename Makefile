@@ -1,5 +1,9 @@
 #!/usr/bin/make
 
+# SPDX-FileCopyrightText: 2021 Paul James <p.james@coolblue.nl>
+#
+# SPDX-License-Identifier: CC0-1.0
+
 .PHONY: erc drc sch_fab pcb_fab erc_and_fab drc_and_fab
 
 DEBUG=
