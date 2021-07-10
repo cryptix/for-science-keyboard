@@ -4,6 +4,16 @@ SPDX-FileCopyrightText: 2021 Paul James <p.james@coolblue.nl>
 SPDX-License-Identifier: CC0-1.0
 -->
 
+[![License: MIT](
+https://img.shields.io/badge/License-MIT-blue.svg)](
+https://choosealicense.com/licenses/mit/)
+[![REUSE status](
+https://api.reuse.software/badge/github.com/peej/for-science-keyboard)](
+https://api.reuse.software/info/github.com/peej/for-science-keyboard)
+[![made-with-Markdown](
+https://img.shields.io/badge/Made%20with-Markdown-1f425f.svg)](
+http://commonmark.org)
+
 *For Science* is a 46 key ortholinear split keyboard PCB with a 3 key thumb cluster.
 
 The goal of this project is to build a usable split keyboard with a PCB case
