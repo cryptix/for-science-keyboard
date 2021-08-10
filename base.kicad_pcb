@@ -1,8 +1,8 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.1.6+dfsg1-1)
+(kicad_pcb (version 20171130) (host pcbnew 5.1.9+dfsg1-1)
 
   (general
     (thickness 1.6)
-    (drawings 39)
+    (drawings 43)
     (tracks 0)
     (zones 0)
     (modules 7)
@@ -17,7 +17,7 @@
     (33 F.Adhes user)
     (34 B.Paste user)
     (35 F.Paste user)
-    (36 B.SilkS user hide)
+    (36 B.SilkS user)
     (37 F.SilkS user)
     (38 B.Mask user)
     (39 F.Mask user)
@@ -1463,6 +1463,10 @@
       (xy -7.283727 7.423656) (xy -7.129825 7.419251) (xy -6.975334 7.422964)) (layer F.SilkS) (width 0.01))
   )
 
+  (gr_poly (pts (xy 116.332 50.546) (xy 116.332 60.706) (xy 106.426 60.706) (xy 106.426 50.546)) (layer B.SilkS) (width 0.1) (tstamp 60FC6E9F))
+  (gr_poly (pts (xy 149.606 50.8) (xy 149.606 60.96) (xy 139.7 60.96) (xy 139.7 50.8)) (layer B.Cu) (width 0.1) (tstamp 60FC6E77))
+  (gr_poly (pts (xy 129.794 49.784) (xy 129.794 59.944) (xy 119.888 59.944) (xy 119.888 49.784)) (layer F.Cu) (width 0.1))
+  (gr_poly (pts (xy 168.402 98.044) (xy 154.686 98.044) (xy 154.686 78.232) (xy 168.402 78.232)) (layer F.SilkS) (width 0.1))
   (gr_text ${PROJECT_BATCH_ID} (at 145.288 135.636) (layer B.SilkS) (tstamp 5F4CC67E)
     (effects (font (size 0.85 1) (thickness 0.15)) (justify left mirror))
   )
@@ -1511,7 +1515,7 @@
   (gr_text Licence: (at 146.558 126.492) (layer B.SilkS) (tstamp 5F48F1D1)
     (effects (font (size 0.85 1) (thickness 0.15)) (justify right mirror))
   )
-  (gr_text "${PROJECT_LICENSE_NAME}" (at 145.288 126.492) (layer B.SilkS) (tstamp 5F48F1D0)
+  (gr_text ${PROJECT_LICENSE_NAME} (at 145.288 126.492) (layer B.SilkS) (tstamp 5F48F1D0)
     (effects (font (size 0.85 1) (thickness 0.15)) (justify left mirror))
   )
   (gr_text Project-Build-Date: (at 146.558 131.064) (layer B.SilkS) (tstamp 5F48F1CF)
@@ -1535,7 +1539,7 @@
     (arrow2a (pts (xy 174.5 141.25) (xy 173.373496 140.663579)))
     (arrow2b (pts (xy 174.5 141.25) (xy 173.373496 141.836421)))
   )
-  (gr_text ${PROJECT_MANUFACTURER_SERIAL}  (at 146.558 134.112) (layer F.SilkS) (tstamp 5F48EF36)
+  (gr_text ${PROJECT_MANUFACTURER_SERIAL} (at 146.558 134.112) (layer F.SilkS) (tstamp 5F48EF36)
     (effects (font (size 0.85 1) (thickness 0.15)) (justify left))
   )
   (gr_text ${PROJECT_MANUFACTURER_NAME} (at 146.558 132.588) (layer F.SilkS) (tstamp 5F48EF33)
@@ -1597,6 +1601,21 @@
       (pts
         (xy 173 138) (xy 119 138) (xy 119 119) (xy 81 119) (xy 81 46)
         (xy 173 46)
+      )
+    )
+  )
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 0) (hatch edge 0.508)
+    (connect_pads (clearance 0.508))
+    (min_thickness 0.254)
+    (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 104.902 74.676) (xy 104.902 90.424) (xy 90.424 90.424) (xy 90.424 74.676)
+      )
+    )
+    (filled_polygon
+      (pts
+        (xy 104.775 90.297) (xy 90.551 90.297) (xy 90.551 74.803) (xy 104.775 74.803)
       )
     )
   )
