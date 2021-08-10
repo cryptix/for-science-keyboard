@@ -25,72 +25,162 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  ERC:
+  inject:
     runs-on: ubuntu-latest
     container: setsoft/kicad_auto:latest
-
     steps:
+    - name: Install deps
+      run: |
+        apt-get update
+        apt-get install -qq git wget python3-pip ttf-mscorefonts-installer
+        fc-cache -f -v
     - uses: actions/checkout@v2
+    - name: Preparations
+      run: |
+        SRC_GEN_DIR=build/src-gen
+        echo "SRC_GEN_DIR=$SRC_GEN_DIR" >> "$GITHUB_ENV"
+
+        # Create all the ancestor dirs
+        mkdir -p "$SRC_GEN_DIR"
+        rmdir "$SRC_GEN_DIR"
+
+        # Copy the whole repo, so we can modify files in there
+        #git workdir add "$SRC_GEN_DIR"
+        git clone . "$SRC_GEN_DIR"
+    - name: Fetch KiCad-text-injector
+      run: |
+        cd build
+        wget https://github.com/hoijui/kicad-text-injector/releases/download/0.2.2/default.target.kicad-text-injector-0.2.2-x86_64-unknown-linux-musl.tar.gz
+        tar xzf *kicad-text-injector*.tar.gz
+        mv target/* ./ || true # HACK for badly packaged text injector up to v0.2.2
+        mv *kicad-text-injector*/kicad-text-injector ./
+        cd ..
+    - name: Fetch KiCad-image-injector
+      run: |
+        cd build
+        git clone https://github.com/hoijui/kicad-image-injector.git
+        pip3 install -r kicad-image-injector/requirements.txt
+        cd ..
+    - name: Inject text and images into PCBs
+      run: |
+        pwd
+        # Loop through all the git-tracked KiCad PCB files
+        for kicad_pcb in $(git ls-tree -r HEAD --name-only | grep ".kicad_pcb\$")
+        do
+          kicad_pcb_inj_text="$SRC_GEN_DIR/TEXT_INJECTED_$kicad_pcb"
+          kicad_pcb_final="$SRC_GEN_DIR/$kicad_pcb"
+          kicad_pcb_images_list_file="${kicad_pcb}.images_to_inject.txt"
+          build/kicad-text-injector \
+            --input "$kicad_pcb" \
+            --output "$kicad_pcb_inj_text" \
+            --env
+          #if [ -f "$kicad_pcb_images_list_file" ]
+          if [ "$kicad_pcb" = "base.kicad_pcb" ] # HACK Replace by the previous line
+          then
+            {
+              echo "qr.png"
+              echo "qr.png"
+              echo "qr.png"
+              echo "qr.png"
+              echo "qr.png"
+            } > "$kicad_pcb_images_list_file" # HACK This needs to be present already or be otherwise generated
+            python3 build/kicad-image-injector/placeholder2image.py \
+              --input "$kicad_pcb_inj_text" \
+              --output "$kicad_pcb_final" \
+              --repl-idents-list-file "$kicad_pcb_images_list_file"
+          else
+            mv "$kicad_pcb_inj_text" "$kicad_pcb_final"
+          fi
+        done
+
+  # ERC:
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+  #   needs: inject
+
+  #   steps:
+  #   - uses: actions/checkout@v2
 
     - name: Run ERC
-      run: make erc
+      run: |
+        cd ${{ env.SRC_GEN_DIR }}
+        make erc
+        cd ../..
 
-    - name: Retrieve results
-      uses: actions/upload-artifact@v1
-      with:
-        name: ERC_Output
-        path: build
+    # - name: Retrieve ERC results
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: ERC_Output
+    #     path: ${{ env.SRC_GEN_DIR }}
 
-  DRC:
-    runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
-    needs: ERC
+  # DRC:
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+  #   needs: ERC
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
     - name: Run DRC
-      run: make drc
+      run: |
+        cd ${{ env.SRC_GEN_DIR }}
+        make drc
+        cd ../..
 
-    - name: Retrieve results
-      uses: actions/upload-artifact@v1
-      with:
-        name: DRC_Output
-        path: build
+    # - name: Retrieve DRC results
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: DRC_Output
+    #     path: ${{ env.SRC_GEN_DIR }}
 
-  FabSch:
-    name: Schematic fabrication files
-    runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
-    needs: ERC
+  # FabSch:
+  #   name: Schematic fabrication files
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+  #   needs: ERC
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
     - name: Run schematic stuff
-      run: make sch_fab
+      run: |
+        cd ${{ env.SRC_GEN_DIR }}
+        make sch_fab
+        cd ../..
 
-    - name: Retrieve results
-      uses: actions/upload-artifact@v1
-      with:
-        name: FabSch_Output
-        path: build
+    # - name: Retrieve FabSch results
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: FabSch_Output
+    #     path: ${{ env.SRC_GEN_DIR }}
 
-  FabPCB:
-    name: PCB fabrication files
-    runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
-    needs: DRC
+  # FabPCB:
+  #   name: PCB fabrication files
+  #   runs-on: ubuntu-latest
+  #   container: setsoft/kicad_auto:latest
+  #   needs: DRC
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
     - name: Run PCB stuff
-      run: make pcb_fab
+      run: |
+        cd ${{ env.SRC_GEN_DIR }}
+        make pcb_fab
+        cd ../..
 
-    - name: Retrieve results
+    # - name: Retrieve FabPCB results
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: FabPCB_Output
+    #     path: ${{ env.SRC_GEN_DIR }}
+
+    - name: Change artifact permissions
+      run: |
+        chmod -R a+r ${{ env.SRC_GEN_DIR }}
+
+    - name: Upload all generated things
       uses: actions/upload-artifact@v1
       with:
-        name: FabPCB_Output
-        path: build
-
+        name: Generated source and outputs
+        path: ${{ env.SRC_GEN_DIR }}
