@@ -50,16 +50,15 @@ jobs:
     - name: Fetch projvar
       run: |
         cd build
-        wget https://github.com/hoijui/projvar/releases/download/0.4.0/default.target.projvar-0.4.0-x86_64-unknown-linux-musl.tar.gz
+        wget https://github.com/hoijui/projvar/releases/download/0.4.1/projvar-0.4.1-x86_64-unknown-linux-musl.tar.gz
         tar xzf *projvar*.tar.gz
         mv *projvar*/projvar ./
         cd ..
     - name: Fetch KiCad-text-injector
       run: |
         cd build
-        wget https://github.com/hoijui/kicad-text-injector/releases/download/0.2.2/default.target.kicad-text-injector-0.2.2-x86_64-unknown-linux-musl.tar.gz
+        wget https://github.com/hoijui/kicad-text-injector/releases/download/0.2.4/kicad-text-injector-0.2.4-x86_64-unknown-linux-musl.tar.gz
         tar xzf *kicad-text-injector*.tar.gz
-        mv target/* ./ || true # HACK for badly packaged text injector up to v0.2.2
         mv *kicad-text-injector*/kicad-text-injector ./
         cd ..
     - name: Fetch KiCad-image-injector
