@@ -71,7 +71,7 @@ jobs:
       run: |
         # Gathers the project meta-data and stores it in projvar.env
         build/projvar \
-          -O build/projvar.env \
+          -O build/projvars.env \
           --log-level Trace \
           --fail \
           -N License \
@@ -79,12 +79,19 @@ jobs:
           -DPROJECT_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)" # TODO HACK Remove this line when this issue is resolved: https://github.com/hoijui/projvar/issues/5
     - name: Generate QR-Code containing meta-data (using qrencode)
       run: |
+        pwd
+        sleep 1
+        find build -name "*projvar*"
+        sleep 1
         cd build
         {
+          pwd
+          find . -name "*projvar*"
+          sleep 1
           # This makes sure that when loading variables from the vile below, they are exported
           set -a
           # Loads the projects meta-data
-          . projvar.env
+          . ./projvars.env
           set +a
           echo "project-name: $PROJECT_NAME"
           # TODO Add more echos
@@ -95,7 +102,7 @@ jobs:
       run: |
         pwd
           set -a
-        . build/projvar.env
+        . build/projvars.env
           set +a
         # Loop through all the git-tracked KiCad PCB files
         for kicad_pcb in $(git ls-tree -r HEAD --name-only | grep ".kicad_pcb\$")
