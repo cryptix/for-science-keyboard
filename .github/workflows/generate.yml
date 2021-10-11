@@ -50,7 +50,7 @@ jobs:
     - name: Fetch projvar
       run: |
         cd build
-        wget https://github.com/hoijui/projvar/releases/download/0.4.1/projvar-0.4.1-x86_64-unknown-linux-musl.tar.gz
+        wget https://github.com/hoijui/projvar/releases/download/0.4.2/projvar-0.4.2-x86_64-unknown-linux-musl.tar.gz
         tar xzf *projvar*.tar.gz
         mv *projvar*/projvar ./
         cd ..
@@ -70,7 +70,13 @@ jobs:
     - name: Gather meta-data (using projvar)
       run: |
         # Gathers the project meta-data and stores it in projvar.env
-        build/projvar -O build/projvar.env --log-level Trace --fail -N License --show-all-retrieved
+        build/projvar \
+          -O build/projvar.env \
+          --log-level Trace \
+          --fail \
+          -N License \
+          --show-all-retrieved \
+          -DPROJECT_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)" # TODO HACK Remove this line when this issue is resolved: https://github.com/hoijui/projvar/issues/5
     - name: Generate QR-Code containing meta-data (using qrencode)
       run: |
         cd build
