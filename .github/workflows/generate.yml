@@ -32,7 +32,7 @@ jobs:
     - name: Install deps
       run: |
         apt-get update
-        apt-get install -qq git wget python3-pip ttf-mscorefonts-installer qrencode
+        apt-get install -qq git wget python3-pip ttf-mscorefonts-installer libffi-dev qrencode
         fc-cache -f -v
     - uses: actions/checkout@v2
     - name: Preparations
