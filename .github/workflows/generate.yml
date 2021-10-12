@@ -79,15 +79,8 @@ jobs:
           -DPROJECT_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)" # TODO HACK Remove this line when this issue is resolved: https://github.com/hoijui/projvar/issues/5
     - name: Generate QR-Code containing meta-data (using qrencode)
       run: |
-        pwd
-        sleep 1
-        find build -name "*projvar*"
-        sleep 1
         cd build
         {
-          pwd
-          find . -name "*projvar*"
-          sleep 1
           # This makes sure that when loading variables from the vile below, they are exported
           set -a
           # Loads the projects meta-data
@@ -100,10 +93,9 @@ jobs:
         cd ..
     - name: Inject text and images into PCBs
       run: |
-        pwd
-          set -a
+        set -a
         . build/projvars.env
-          set +a
+        set +a
         # Loop through all the git-tracked KiCad PCB files
         for kicad_pcb in $(git ls-tree -r HEAD --name-only | grep ".kicad_pcb\$")
         do
