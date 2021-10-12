@@ -50,7 +50,7 @@ jobs:
     - name: Fetch projvar
       run: |
         cd build
-        wget https://github.com/hoijui/projvar/releases/download/0.4.3/projvar-0.4.3-x86_64-unknown-linux-musl.tar.gz
+        wget https://github.com/hoijui/projvar/releases/download/0.5.1/projvar-0.5.1-x86_64-unknown-linux-musl.tar.gz
         tar xzf *projvar*.tar.gz
         mv *projvar*/projvar ./
         cd ..
@@ -69,14 +69,23 @@ jobs:
         cd ..
     - name: Gather meta-data (using projvar)
       run: |
-        # Gathers the project meta-data and stores it in projvar.env
+        # Gathers the project meta-data and stores it in build/projvar.env
         build/projvar \
           -O build/projvars.env \
           --log-level Trace \
           --fail \
-          -N License \
+          --only-required \
+          --none \
+          -R PROJECT_BUILD_DATE \
+          -R PROJECT_LICENSES \
+          -R PROJECT_REPO_WEB_URL \
+          -R PROJECT_NAME \
+          -R PROJECT_VERSION \
+          -R PROJECT_VERSION_DATE \
           --show-all-retrieved \
           -DPROJECT_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)" # TODO HACK Remove this line when this issue is resolved: https://github.com/hoijui/projvar/issues/5
+        # Adds the statically defined variables
+        cat projvars.env >> build/projvars.env
     - name: Generate QR-Code containing meta-data (using qrencode)
       run: |
         cd build
@@ -86,8 +95,20 @@ jobs:
           # Loads the projects meta-data
           . ./projvars.env
           set +a
-          echo "project-name: $PROJECT_NAME"
-          # TODO Add more echos
+          echo "{"
+          echo "  \"project: {"
+          echo "    \"name\": \"$PROJECT_NAME\""
+          echo "    \"version\": \"$PROJECT_VERSION\""
+          echo "    \"version-date\": \"$PROJECT_VERSION_DATE\""
+          echo "    \"build-date\": \"$PROJECT_BUILD_DATE\""
+          echo "    \"repo\": \"$PROJECT_REPO_WEB_URL\""
+          echo "    \"licenses\": \"$PROJECT_LICENSES\""
+          echo "  }"
+          echo "  \"manufacturer: {"
+          echo "    \"name\": \"$MANUFACTURER_NAME\""
+          echo "    \"serial\": \"$MANUFACTURER_SERIAL\""
+          echo "  }"
+          echo "}"
         } > qr-data.txt
         qrencode --size 1 --margin 0 --output qr.png --read-from qr-data.txt
         cd ..
@@ -105,6 +126,7 @@ jobs:
           build/kicad-text-injector \
             --input "$kicad_pcb" \
             --output "$kicad_pcb_inj_text" \
+            --fail-on-missing-values \
             --env
           #if [ -f "$kicad_pcb_images_list_file" ]
           if [ "$kicad_pcb" = "base.kicad_pcb" ] # HACK Replace by the previous line
