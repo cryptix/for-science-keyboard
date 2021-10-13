@@ -37,7 +37,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Preparations
       run: |
-        SRC_GEN_DIR=build/src-gen
+        OUR_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)"
+        ARCHIVE_NAME="for-science-keyboard_$OUR_VERSION_$(date +'%Y_%m_%d_%H_%M_%S')"
+
+        SRC_GEN_DIR_ROOT="build/src-gen"
+        SRC_GEN_DIR="$SRC_GEN_DIR_ROOT/$ARCHIVE_NAME"
+        echo "OUR_VERSION=$OUR_VERSION" >> "$GITHUB_ENV"
+        echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
+        echo "SRC_GEN_DIR_ROOT=$SRC_GEN_DIR_ROOT" >> "$GITHUB_ENV"
         echo "SRC_GEN_DIR=$SRC_GEN_DIR" >> "$GITHUB_ENV"
 
         # Create all the ancestor dirs
@@ -90,11 +97,8 @@ jobs:
       run: |
         cd build
         {
-          # This makes sure that when loading variables from the vile below, they are exported
-          set -a
           # Loads the projects meta-data
           . ./projvars.env
-          set +a
           echo "{"
           echo "  \"project: {"
           echo "    \"name\": \"$PROJECT_NAME\""
@@ -109,11 +113,38 @@ jobs:
           echo "    \"serial\": \"$MANUFACTURER_SERIAL\""
           echo "  }"
           echo "}"
-        } > qr-data.txt
-        qrencode --size 1 --margin 0 --output qr.png --read-from qr-data.txt
+        } > qr-complete.txt
+        {
+          . ./projvars.env
+          echo "{"
+          echo "\"name\": \"$PROJECT_NAME\""
+          echo "\"version\": \"$PROJECT_VERSION\""
+          echo "\"date\": \"$PROJECT_VERSION_DATE\""
+          echo "\"repo\": \"$PROJECT_REPO_WEB_URL\""
+          echo "\"licenses\": \"$PROJECT_LICENSES\""
+          echo "}"
+        } > qr-main.txt
+        {
+          . ./projvars.env
+          echo "{"
+          echo "\"version\": \"$PROJECT_VERSION\""
+          echo "\"repo\": \"$PROJECT_REPO_WEB_URL\""
+          echo "}"
+        } > qr-minimal.txt
+        # Generate QR-Code PNGs
+        for data_file in qr-*.txt
+        do
+          img_file="${data_file%.txt}.png"
+          qrencode \
+            --size 1 \
+            --margin 0 \
+            --read-from "$data_file" \
+            --output "$img_file"
+        done
         cd ..
     - name: Inject text and images into PCBs
       run: |
+        # This makes sure that when loading variables from the file below, they are exported
         set -a
         . build/projvars.env
         set +a
@@ -132,16 +163,18 @@ jobs:
           if [ "$kicad_pcb" = "base.kicad_pcb" ] # HACK Replace by the previous line
           then
             {
-              echo "build/qr.png"
-              echo "build/qr.png"
-              echo "build/qr.png"
-              echo "build/qr.png"
-              echo "build/qr.png"
+              qr_code_img_file="build/qr-minimal.png"
+              echo "$qr_code_img_file"
+              echo "$qr_code_img_file"
+              echo "$qr_code_img_file"
+              echo "$qr_code_img_file"
+              echo "$qr_code_img_file"
             } > "$kicad_pcb_images_list_file" # HACK This needs to be present already or be otherwise generated
             python3 build/kicad-image-injector/placeholder2image.py \
               --input "$kicad_pcb_inj_text" \
               --output "$kicad_pcb_final" \
               --repl-idents-list-file "$kicad_pcb_images_list_file"
+            rm "$kicad_pcb_inj_text"
           else
             mv "$kicad_pcb_inj_text" "$kicad_pcb_final"
           fi
@@ -236,5 +269,5 @@ jobs:
     - name: Upload all generated things
       uses: actions/upload-artifact@v1
       with:
-        name: Generated source and outputs
-        path: ${{ env.SRC_GEN_DIR }}
+        name: ${{ env.ARCHIVE_NAME }}
+        path: ${{ env.SRC_GEN_DIR_ROOT }}
