@@ -1,0 +1,344 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+#
+# SPDX-License-Identifier: Unlicense
+
+# Exit immediately on each error and unset variable;
+# see: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+#set -Eeu
+
+script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+sudo=$(which sudo && echo "sudo" || echo "")
+PROJVAR_VERSION="0.5.1"
+KICAD_TEXT_INJECTOR_VERSION="0.2.4"
+PROJECT_VARS_FILE_NAME="projvars.env"
+
+function print_help() {
+
+	echo "Run all we want to be done in our CI."
+	echo
+	echo "Usage:"
+	echo "         $(basename "$0") [OPTIONS] <rdf-file> [rdf-file...]"
+	echo "Options:"
+	echo "          -h, --help                  Show this help message"
+	echo "          --force-python3             WARNING! Sets python3 as the python executable, systen wide!"
+	echo "          -s, --install-requirements  Install whatever this script needs to run (works only on Debian/Ubuntu)"
+}
+
+function initializing_vars() {
+
+	echo "Initializing vars ..."
+
+	set -a
+	PROJECT_NAME="${CI_PROJECT_NAME:-$(cd "$script_dir/"; basename "$(pwd)")}"
+	PROJECT_VERSION="${PROJECT_VERSION:-$(git describe --tags --dirty --broken --always --candidates=99 --first-parent || echo "<UNKNOWN>")}"
+	ARCHIVE_NAME="${PROJECT_NAME}_${PROJECT_VERSION}_$(date +'%Y_%m_%d_%H_%M_%S')"
+	ARCHIVE_FILE_NAME="${ARCHIVE_NAME}.tar.gz"
+	SRC_DIR="$script_dir"
+	BUILD_DIR="$SRC_DIR/build"
+	SRC_GEN_DIR_ROOT="$BUILD_DIR/src-gen"
+	SRC_GEN_DIR="$SRC_GEN_DIR_ROOT/$ARCHIVE_NAME"
+	BUILD_TOOLS_DIR="$BUILD_DIR/tools"
+	TOOL_PROJVAR="$BUILD_TOOLS_DIR/projvar"
+	TOOL_TXT_INJ="$BUILD_TOOLS_DIR/kicad-text-injector"
+	TOOL_IMG_INJ="$BUILD_TOOLS_DIR/kicad-image-injector/placeholder2image.py"
+	set +a
+	if [ -n "${GITHUB_ENV:-}" ]
+	then
+		{
+			# TODO Automate this part (we have it in an other script already, maybe grep -r "varables+="
+			echo "PROJECT_NAME=$PROJECT_NAME"
+			echo "PROJECT_VERSION=$PROJECT_VERSION"
+			echo "ARCHIVE_NAME=$ARCHIVE_NAME"
+			echo "ARCHIVE_FILE_NAME=$ARCHIVE_FILE_NAME"
+			echo "SRC_DIR=$SRC_DIR"
+			echo "BUILD_DIR=$BUILD_DIR"
+			echo "SRC_GEN_DIR_ROOT=$SRC_GEN_DIR_ROOT"
+			echo "SRC_GEN_DIR=$SRC_GEN_DIR"
+			echo "BUILD_TOOLS_DIR=$BUILD_TOOLS_DIR"
+			echo "TOOL_PROJVAR=$TOOL_PROJVAR"
+			echo "TOOL_TXT_INJ=$TOOL_TXT_INJ"
+			echo "TOOL_IMG_INJ=$TOOL_IMG_INJ"
+		} >> "$GITHUB_ENV"
+	fi
+}
+
+function fetch_rust_tool() {
+	tool_name="$1"
+	version="$2"
+	version_file="$BUILD_TOOLS_DIR/${tool_name}.$version"
+	if ! [ -f "$version_file" ] || [ "$(cat "$version_file")" != "$version" ]
+	then
+		echo "Fetching '$tool_name' version $version ..."
+		arch_name="${tool_name}-${version}-x86_64-unknown-linux-musl"
+		arch_file_name="$arch_name.tar.gz"
+		wget \
+			-O "$BUILD_TOOLS_DIR/$arch_file_name" \
+			"https://github.com/hoijui/$tool_name/releases/download/$version/$arch_file_name"
+		tar xzf "$BUILD_TOOLS_DIR/$arch_file_name" -C "$BUILD_TOOLS_DIR"
+		mv "$BUILD_TOOLS_DIR/${tool_name}-"*"/$tool_name" "$BUILD_TOOLS_DIR/"
+		echo "$version" > "$BUILD_TOOLS_DIR/${tool_name}.$version"
+	fi
+}
+
+function fetch_projvar() {
+	tool_name="projvar"
+	version="$PROJVAR_VERSION"
+	fetch_rust_tool "$tool_name" "$version"
+}
+
+function fetch_kicad_text_injector() {
+	tool_name="kicad-text-injector"
+	version="$KICAD_TEXT_INJECTOR_VERSION"
+	fetch_rust_tool "$tool_name" "$version"
+}
+
+function fetch_kicad_image_injector() {
+	tool_name="kicad-image-injector"
+	repo_dir="$BUILD_TOOLS_DIR/${tool_name}"
+	echo "Fetching '$tool_name' latest version ..."
+	if [ -d "$repo_dir" ]
+	then
+		git fetch
+		git rebase origin/master
+	else
+		git clone \
+			"https://github.com/hoijui/${tool_name}.git" \
+			"$repo_dir"
+	fi
+        $sudo pip3 install -r \
+		"$BUILD_TOOLS_DIR/${tool_name}/requirements.txt"
+}
+
+function install_requirements() {
+
+	echo "Install system-deps ..."
+
+	$sudo apt-get update
+	$sudo apt-get install -qq git wget python3-pip ttf-mscorefonts-installer libffi-dev qrencode
+
+	initializing_vars
+
+	mkdir -p "$BUILD_TOOLS_DIR"
+
+	# build font information cache files
+	$sudo fc-cache -f -v
+
+	fetch_projvar
+	fetch_kicad_text_injector
+	fetch_kicad_image_injector
+}
+
+function force_use_python_3_system_wide() {
+	# Make Python 3 the default, so pandoc will use it to run panflute,
+	# which requires at least Python 3.6
+	$sudo rm -f /usr/bin/python
+	$sudo ln -s /usr/bin/python3 /usr/bin/python
+}
+
+# read command-line args
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+	arg="$1"
+	shift # past argument
+
+	case "$arg" in
+		-h|--help)
+			print_help
+			exit 0
+			;;
+		--force-python3)
+			force_use_python_3_system_wide
+			exit 0
+			;;
+		-s|--install-requirements)
+			install_requirements
+			exit 0
+			;;
+		*) # non-/unknown option
+			POSITIONAL+=("$arg") # save it in an array for later
+			;;
+	esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+initializing_vars
+
+echo "Check if tools are available ..."
+
+if ! [ -f "$TOOL_PROJVAR" ]
+then
+	>&2 echo "ERROR: Could not find projvar at '$TOOL_PROJVAR'"
+	exit 1
+fi
+if ! [ -f "$TOOL_TXT_INJ" ]
+then
+	>&2 echo "ERROR: Could not find kicad-text-injector at '$TOOL_TXT_INJ'"
+	exit 2
+fi
+if ! [ -f "$TOOL_IMG_INJ" ]
+then
+	>&2 echo "ERROR: Could not find kicad-image-injector at '$TOOL_IMG_INJ'"
+	exit 3
+fi
+
+echo "Creating build dir structure ..."
+
+# Create all the ancestor dirs
+mkdir -p "$SRC_GEN_DIR"
+rmdir "$SRC_GEN_DIR"
+
+echo "Copying sources to generated sources dir ..."
+# Copy the whole repo, so we can modify files in there
+#git workdir add "$SRC_GEN_DIR"
+git clone . "$SRC_GEN_DIR"
+
+echo "Gathering project meta-data ..."
+
+projvars_file_src="$SRC_DIR/$PROJECT_VARS_FILE_NAME"
+projvars_file_gen="$BUILD_DIR/$PROJECT_VARS_FILE_NAME"
+
+# Gathers the project meta-data and stores it in build/projvar.env
+"$TOOL_PROJVAR" \
+	-O "$projvars_file_gen" \
+	--log-level Trace \
+	--fail \
+	--only-required \
+	--none \
+	-R PROJECT_BUILD_DATE \
+	-R PROJECT_LICENSES \
+	-R PROJECT_REPO_WEB_URL \
+	-R PROJECT_NAME \
+	-R PROJECT_VERSION \
+	-R PROJECT_VERSION_DATE \
+	--show-all-retrieved \
+	-DPROJECT_VERSION="$PROJECT_VERSION" # TODO HACK Remove this line when this issue is resolved: https://github.com/hoijui/projvar/issues/5
+# Adds the statically defined variables
+if [ -f "$projvars_file_src" ]
+then
+	cat "$projvars_file_src" >> "$projvars_file_gen"
+fi
+
+echo "(Re-)Loading project meta-data ..."
+
+# This makes sure that when loading variables from the file below, they are exported
+set -a
+# shellcheck source=build/projvars.env
+. "$projvars_file_gen"
+set +a
+
+echo "Generate QR-Code payloads (==data) ..."
+
+# Generate JSON meta-data files
+{
+	# Loads the projects meta-data
+	echo "{"
+	echo "  \"project: {"
+	echo "    \"name\": \"$PROJECT_NAME\""
+	echo "    \"version\": \"$PROJECT_VERSION\""
+	echo "    \"version-date\": \"$PROJECT_VERSION_DATE\""
+	echo "    \"build-date\": \"$PROJECT_BUILD_DATE\""
+	echo "    \"repo\": \"$PROJECT_REPO_WEB_URL\""
+	echo "    \"licenses\": \"$PROJECT_LICENSES\""
+	echo "  }"
+	echo "  \"manufacturer: {"
+	echo "    \"name\": \"$MANUFACTURER_NAME\""
+	echo "    \"serial\": \"$MANUFACTURER_SERIAL\""
+	echo "  }"
+	echo "}"
+} > "$BUILD_DIR/qr-complete.txt"
+
+{
+	echo "{"
+	echo "\"name\": \"$PROJECT_NAME\""
+	echo "\"version\": \"$PROJECT_VERSION\""
+	echo "\"date\": \"$PROJECT_VERSION_DATE\""
+	echo "\"repo\": \"$PROJECT_REPO_WEB_URL\""
+	echo "\"licenses\": \"$PROJECT_LICENSES\""
+	echo "}"
+} > "$BUILD_DIR/qr-main.txt"
+
+{
+	echo "{"
+	echo "\"version\": \"$PROJECT_VERSION\""
+	echo "\"repo\": \"$PROJECT_REPO_WEB_URL\""
+	echo "}"
+} > "$BUILD_DIR/qr-minimal.txt"
+
+echo "Generate QR-Codes ..."
+
+for data_file in "$BUILD_DIR/qr-"*.txt
+do
+	img_file="${data_file%.txt}.png"
+	qrencode \
+		--size 1 \
+		--margin 0 \
+		--read-from "$data_file" \
+		--output "$img_file"
+done
+
+echo "Inject text and images into (copies of) the PCBs ..."
+
+# Loop through all the git-tracked KiCad PCB files
+for kicad_pcb in $(git ls-tree -r HEAD --name-only | grep ".kicad_pcb\$")
+do
+	kicad_pcb_inj_text="$SRC_GEN_DIR/TEXT_INJECTED_$kicad_pcb"
+	kicad_pcb_final="$SRC_GEN_DIR/$kicad_pcb"
+	kicad_pcb_images_list_file="${kicad_pcb}.images_to_inject.txt"
+	"$TOOL_TXT_INJ" \
+		--input "$kicad_pcb" \
+		--output "$kicad_pcb_inj_text" \
+		--fail-on-missing-values \
+		--env
+	#if [ -f "$kicad_pcb_images_list_file" ]
+	if [ "$kicad_pcb" = "base.kicad_pcb" ] # HACK Replace by the previous line
+	then
+		{
+			qr_code_img_file="build/qr-minimal.png"
+			echo "$qr_code_img_file" # HACK We hardcode the numbe rof occurences her .. nono!
+			echo "$qr_code_img_file"
+			echo "$qr_code_img_file"
+			echo "$qr_code_img_file"
+			echo "$qr_code_img_file"
+		} > "$kicad_pcb_images_list_file"
+		python3 "$TOOL_IMG_INJ" \
+			--input "$kicad_pcb_inj_text" \
+			--output "$kicad_pcb_final" \
+			--repl-idents-list-file "$kicad_pcb_images_list_file"
+		rm "$kicad_pcb_inj_text"
+	else
+		mv "$kicad_pcb_inj_text" "$kicad_pcb_final"
+	fi
+done
+
+echo "And the stage belongs to ... KiBot! ..."
+
+cd "$SRC_GEN_DIR"
+
+echo "Run ERC ..."
+make erc
+
+echo "Run DRC ..."
+make drc
+
+echo "Run schematic processing ..."
+make sch_fab
+
+echo "Run PCB processing ..."
+make pcb_fab
+
+echo "Change artifact permissions ..."
+chmod -R a+r "$BUILD_DIR"
+
+# Only create the archive if *not* running on CI,
+# as there it will be done outside this script
+if [ "${CI:-XXX}" = "XXX" ]
+then
+	echo "Generate the archive ..."
+	tar cvf "$SRC_GEN_DIR_ROOT/$ARCHIVE_FILE_NAME" -C "$SRC_GEN_DIR_ROOT" "$ARCHIVE_NAME"
+fi
+
+echo "done."
