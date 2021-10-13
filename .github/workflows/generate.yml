@@ -35,10 +35,12 @@ jobs:
         apt-get install -qq git wget python3-pip ttf-mscorefonts-installer libffi-dev qrencode
         fc-cache -f -v
     - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0 # Non-shallow clone -> `git describe` is able ot pickup tags!
     - name: Preparations
       run: |
         OUR_VERSION="$(git describe --tags --dirty --broken --always --candidates=99 --first-parent)"
-        ARCHIVE_NAME="for-science-keyboard_$OUR_VERSION_$(date +'%Y_%m_%d_%H_%M_%S')"
+        ARCHIVE_NAME="for-science-keyboard_${OUR_VERSION}_$(date +'%Y_%m_%d_%H_%M_%S')"
 
         SRC_GEN_DIR_ROOT="build/src-gen"
         SRC_GEN_DIR="$SRC_GEN_DIR_ROOT/$ARCHIVE_NAME"
