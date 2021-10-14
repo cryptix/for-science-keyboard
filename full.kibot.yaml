@@ -159,7 +159,7 @@ outputs:
     type: pcbdraw
     dir: .
     options:
-      format: jpg
+      format: png
       show_components: none
       dpi: 600
 
@@ -168,7 +168,7 @@ outputs:
     type: pcbdraw
     dir: .
     options:
-      format: jpg
+      format: png
       bottom: True
       show_components: none
       dpi: 600
