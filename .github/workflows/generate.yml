@@ -27,7 +27,7 @@ on:
 jobs:
   inject:
     runs-on: ubuntu-latest
-    container: setsoft/kicad_auto:latest
+    container: setsoft/kicad_auto:latest # NOTE: See here what this does: https://github.com/INTI-CMNB/kicad_auto/blob/master/Dockerfile
     steps:
     - name: Install latest git
       run: apt-get update && apt-get install -qq git
