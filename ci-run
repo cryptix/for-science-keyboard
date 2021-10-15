@@ -112,6 +112,48 @@ function fetch_kicad_image_injector() {
 		"$BUILD_TOOLS_DIR/${tool_name}/requirements.txt"
 }
 
+function get_gh_inti_deb() {
+	proj_name="$1"
+	curl -s "https://api.github.com/repos/INTI-CMNB/$proj_name/releases/latest" \
+		| grep "browser_download_url.*deb" \
+		| cut -d : -f 2,3 \
+		| tr -d \" \
+		| wget -i -
+}
+
+function install_kibot_and_deps() {
+
+	# These instrucitons are copied form the KiBot KiCad Docker container "setsoft/kicad_auto:latest",
+	# to be seen here:
+	# https://github.com/INTI-CMNB/kicad_auto/blob/master/Dockerfile
+	# and its parent image here:
+	# https://github.com/INTI-CMNB/kicad_debian/blob/master/Dockerfile
+	#	-t buster-backports \
+	$sudo apt-get -y install \
+		--no-install-recommends \
+		kicad \
+		kicad-libraries
+	$sudo apt-get -y install \
+		make \
+		wget \
+		curl \
+		rar \
+		bzip2 \
+		librsvg2-bin
+	$sudo apt-get -y install \
+		--no-install-recommends \
+		imagemagick
+
+	cd "$BUILD_TOOLS_DIR"
+	get_gh_inti_deb KiAuto
+	get_gh_inti_deb KiBoM
+	get_gh_inti_deb InteractiveHtmlBom
+	get_gh_inti_deb PcbDraw
+	get_gh_inti_deb KiCost
+	get_gh_inti_deb KiBot
+	$sudo apt -y install --no-install-recommends ./*.deb
+}
+
 function install_requirements() {
 
 	echo "Install system-deps ..."
@@ -129,6 +171,13 @@ function install_requirements() {
 	fetch_projvar
 	fetch_kicad_text_injector
 	fetch_kicad_image_injector
+
+	if [ "${CI:-XXX}" = "XXX" ]
+	then
+		# Skip installing KiAuto and KiBot if runing on CI,
+		# because there we use a container that already provides it.
+		install_kibot_and_deps
+	fi
 }
 
 function force_use_python_3_system_wide() {
