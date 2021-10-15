@@ -154,7 +154,7 @@ do
 			force_use_python_3_system_wide
 			exit 0
 			;;
-		-s|--install-requirements)
+		-i|--install-requirements)
 			install_requirements
 			exit 0
 			;;
