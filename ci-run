@@ -292,7 +292,7 @@ for kicad_pcb in $(git ls-tree -r HEAD --name-only | grep ".kicad_pcb\$")
 do
 	kicad_pcb_inj_text="$SRC_GEN_DIR/TEXT_INJECTED_$kicad_pcb"
 	kicad_pcb_final="$SRC_GEN_DIR/$kicad_pcb"
-	kicad_pcb_images_list_file="${kicad_pcb}.images_to_inject.txt"
+	kicad_pcb_images_list_file="$BUILD_DIR/${kicad_pcb}.images_to_inject.txt"
 	"$TOOL_TXT_INJ" \
 		--input "$kicad_pcb" \
 		--output "$kicad_pcb_inj_text" \
