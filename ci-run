@@ -195,6 +195,7 @@ echo "Creating build dir structure ..."
 # Create all the ancestor dirs
 mkdir -p "$SRC_GEN_DIR"
 rmdir "$SRC_GEN_DIR"
+rm -Rf "${SRC_GEN_DIR_ROOT:?}/"*
 
 echo "Copying sources to generated sources dir ..."
 # Copy the whole repo, so we can modify files in there
