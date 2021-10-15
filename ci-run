@@ -138,6 +138,8 @@ function force_use_python_3_system_wide() {
 	$sudo ln -s /usr/bin/python3 /usr/bin/python
 }
 
+short=false
+
 # read command-line args
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -153,6 +155,9 @@ do
 		--force-python3)
 			force_use_python_3_system_wide
 			exit 0
+			;;
+		-s|--short)
+			short=true
 			;;
 		-i|--install-requirements)
 			install_requirements
@@ -314,31 +319,34 @@ do
 	fi
 done
 
-echo "And the stage belongs to ... KiBot! ..."
-
-cd "$SRC_GEN_DIR"
-
-echo "Run ERC ..."
-make erc
-
-echo "Run DRC ..."
-make drc
-
-echo "Run schematic processing ..."
-make sch_fab
-
-echo "Run PCB processing ..."
-make pcb_fab
-
-echo "Change artifact permissions ..."
-chmod -R a+r "$BUILD_DIR"
-
-# Only create the archive if *not* running on CI,
-# as there it will be done outside this script
-if [ "${CI:-XXX}" = "XXX" ]
+if ! $short
 then
-	echo "Generate the archive ..."
-	tar cvf "$SRC_GEN_DIR_ROOT/$ARCHIVE_FILE_NAME" -C "$SRC_GEN_DIR_ROOT" "$ARCHIVE_NAME"
+	echo "And the stage belongs to ... KiBot! ..."
+
+	cd "$SRC_GEN_DIR"
+
+	echo "Run ERC ..."
+	make erc
+
+	echo "Run DRC ..."
+	make drc
+
+	echo "Run schematic processing ..."
+	make sch_fab
+
+	echo "Run PCB processing ..."
+	make pcb_fab
+
+	echo "Change artifact permissions ..."
+	chmod -R a+r "$BUILD_DIR"
+
+	# Only create the archive if *not* running on CI,
+	# as there it will be done outside this script
+	if [ "${CI:-XXX}" = "XXX" ]
+	then
+		echo "Generate the archive ..."
+		tar cvf "$SRC_GEN_DIR_ROOT/$ARCHIVE_FILE_NAME" -C "$SRC_GEN_DIR_ROOT" "$ARCHIVE_NAME"
+	fi
 fi
 
 echo "done."
