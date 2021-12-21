@@ -40,10 +40,9 @@ function initializing_vars() {
 	BUILD_DIR="$SRC_DIR/build"
 	SRC_GEN_DIR_ROOT="$BUILD_DIR/src-gen"
 	SRC_GEN_DIR="$SRC_GEN_DIR_ROOT/$ARCHIVE_NAME"
-	BUILD_TOOLS_DIR="$BUILD_DIR/tools"
-	TOOL_PROJVAR="$BUILD_TOOLS_DIR/projvar"
-	TOOL_TXT_INJ="$BUILD_TOOLS_DIR/kicad-text-injector"
-	TOOL_IMG_INJ="$BUILD_TOOLS_DIR/kicad-image-injector/placeholder2image.py"
+	TOOL_PROJVAR="/usr/local/bin/projvar"
+	TOOL_TXT_INJ="/usr/local/bin/kicad-text-injector"
+	TOOL_IMG_INJ="/usr/src/kicad-image-injector/placeholder2image.py"
 	set +a
 	if [ -n "${GITHUB_ENV:-}" ]
 	then
@@ -57,7 +56,6 @@ function initializing_vars() {
 			echo "BUILD_DIR=$BUILD_DIR"
 			echo "SRC_GEN_DIR_ROOT=$SRC_GEN_DIR_ROOT"
 			echo "SRC_GEN_DIR=$SRC_GEN_DIR"
-			echo "BUILD_TOOLS_DIR=$BUILD_TOOLS_DIR"
 			echo "TOOL_PROJVAR=$TOOL_PROJVAR"
 			echo "TOOL_TXT_INJ=$TOOL_TXT_INJ"
 			echo "TOOL_IMG_INJ=$TOOL_IMG_INJ"
@@ -65,127 +63,7 @@ function initializing_vars() {
 	fi
 }
 
-function fetch_rust_tool() {
-	tool_name="$1"
-	version="$2"
-	version_file="$BUILD_TOOLS_DIR/${tool_name}.$version"
-	if ! [ -f "$version_file" ] || [ "$(cat "$version_file")" != "$version" ]
-	then
-		echo "Fetching '$tool_name' version $version ..."
-		arch_name="${tool_name}-${version}-x86_64-unknown-linux-musl"
-		arch_file_name="$arch_name.tar.gz"
-		wget \
-			-O "$BUILD_TOOLS_DIR/$arch_file_name" \
-			"https://github.com/hoijui/$tool_name/releases/download/$version/$arch_file_name"
-		tar xzf "$BUILD_TOOLS_DIR/$arch_file_name" -C "$BUILD_TOOLS_DIR"
-		mv "$BUILD_TOOLS_DIR/${tool_name}-"*"/$tool_name" "$BUILD_TOOLS_DIR/"
-		echo "$version" > "$BUILD_TOOLS_DIR/${tool_name}.$version"
-	fi
-}
 
-function fetch_projvar() {
-	tool_name="projvar"
-	version="$PROJVAR_VERSION"
-	fetch_rust_tool "$tool_name" "$version"
-}
-
-function fetch_kicad_text_injector() {
-	tool_name="kicad-text-injector"
-	version="$KICAD_TEXT_INJECTOR_VERSION"
-	fetch_rust_tool "$tool_name" "$version"
-}
-
-function fetch_kicad_image_injector() {
-	tool_name="kicad-image-injector"
-	repo_dir="$BUILD_TOOLS_DIR/${tool_name}"
-	echo "Fetching '$tool_name' latest version ..."
-	if [ -d "$repo_dir" ]
-	then
-		git fetch
-		git rebase origin/master
-	else
-		git clone \
-			"https://github.com/hoijui/${tool_name}.git" \
-			"$repo_dir"
-	fi
-        $sudo pip3 install -r \
-		"$BUILD_TOOLS_DIR/${tool_name}/requirements.txt"
-}
-
-function get_gh_inti_deb() {
-	proj_name="$1"
-	curl -s "https://api.github.com/repos/INTI-CMNB/$proj_name/releases/latest" \
-		| grep "browser_download_url.*deb" \
-		| cut -d : -f 2,3 \
-		| tr -d \" \
-		| wget -i -
-}
-
-function install_kibot_and_deps() {
-
-	# These instrucitons are copied form the KiBot KiCad Docker container "setsoft/kicad_auto:latest",
-	# to be seen here:
-	# https://github.com/INTI-CMNB/kicad_auto/blob/master/Dockerfile
-	# and its parent image here:
-	# https://github.com/INTI-CMNB/kicad_debian/blob/master/Dockerfile
-	#	-t buster-backports \
-	$sudo apt-get -y install \
-		--no-install-recommends \
-		kicad \
-		kicad-libraries
-	$sudo apt-get -y install \
-		make \
-		wget \
-		curl \
-		rar \
-		bzip2 \
-		librsvg2-bin
-	$sudo apt-get -y install \
-		--no-install-recommends \
-		imagemagick
-
-	cd "$BUILD_TOOLS_DIR"
-	get_gh_inti_deb KiAuto
-	get_gh_inti_deb KiBoM
-	get_gh_inti_deb InteractiveHtmlBom
-	get_gh_inti_deb PcbDraw
-	get_gh_inti_deb KiCost
-	get_gh_inti_deb KiBot
-	$sudo apt -y install --no-install-recommends ./*.deb
-}
-
-function install_requirements() {
-
-	echo "Install system-deps ..."
-
-	$sudo apt-get update
-	$sudo apt-get install -qq git wget python3-pip ttf-mscorefonts-installer libffi-dev qrencode
-
-	initializing_vars
-
-	mkdir -p "$BUILD_TOOLS_DIR"
-
-	# build font information cache files
-	$sudo fc-cache -f -v
-
-	fetch_projvar
-	fetch_kicad_text_injector
-	fetch_kicad_image_injector
-
-	if [ "${CI:-XXX}" = "XXX" ]
-	then
-		# Skip installing KiAuto and KiBot if runing on CI,
-		# because there we use a container that already provides it.
-		install_kibot_and_deps
-	fi
-}
-
-function force_use_python_3_system_wide() {
-	# Make Python 3 the default, so pandoc will use it to run panflute,
-	# which requires at least Python 3.6
-	$sudo rm -f /usr/bin/python
-	$sudo ln -s /usr/bin/python3 /usr/bin/python
-}
 
 short=false
 
@@ -201,16 +79,8 @@ do
 			print_help
 			exit 0
 			;;
-		--force-python3)
-			force_use_python_3_system_wide
-			exit 0
-			;;
 		-s|--short)
 			short=true
-			;;
-		-i|--install-requirements)
-			install_requirements
-			exit 0
 			;;
 		*) # non-/unknown option
 			POSITIONAL+=("$arg") # save it in an array for later
