@@ -121,70 +121,18 @@ function get_gh_inti_deb() {
 		| wget -i -
 }
 
-function install_kibot_and_deps() {
-
-	# These instrucitons are copied form the KiBot KiCad Docker container "setsoft/kicad_auto:latest",
-	# to be seen here:
-	# https://github.com/INTI-CMNB/kicad_auto/blob/master/Dockerfile
-	# and its parent image here:
-	# https://github.com/INTI-CMNB/kicad_debian/blob/master/Dockerfile
-	#	-t buster-backports \
-	$sudo apt-get -y install \
-		--no-install-recommends \
-		kicad \
-		kicad-libraries
-	$sudo apt-get -y install \
-		make \
-		wget \
-		curl \
-		rar \
-		bzip2 \
-		librsvg2-bin
-	$sudo apt-get -y install \
-		--no-install-recommends \
-		imagemagick
-
-	cd "$BUILD_TOOLS_DIR"
-	get_gh_inti_deb KiAuto
-	get_gh_inti_deb KiBoM
-	get_gh_inti_deb InteractiveHtmlBom
-	get_gh_inti_deb PcbDraw
-	get_gh_inti_deb KiCost
-	get_gh_inti_deb KiBot
-	$sudo apt -y install --no-install-recommends ./*.deb
-}
-
 function install_requirements() {
 
-	echo "Install system-deps ..."
-
-	$sudo apt-get update
-	$sudo apt-get install -qq git wget python3-pip ttf-mscorefonts-installer libffi-dev qrencode
 
 	initializing_vars
 
 	mkdir -p "$BUILD_TOOLS_DIR"
 
-	# build font information cache files
-	$sudo fc-cache -f -v
-
 	fetch_projvar
 	fetch_kicad_text_injector
 	fetch_kicad_image_injector
 
-	if [ "${CI:-XXX}" = "XXX" ]
-	then
-		# Skip installing KiAuto and KiBot if runing on CI,
-		# because there we use a container that already provides it.
-		install_kibot_and_deps
-	fi
-}
 
-function force_use_python_3_system_wide() {
-	# Make Python 3 the default, so pandoc will use it to run panflute,
-	# which requires at least Python 3.6
-	$sudo rm -f /usr/bin/python
-	$sudo ln -s /usr/bin/python3 /usr/bin/python
 }
 
 short=false
@@ -199,10 +147,6 @@ do
 	case "$arg" in
 		-h|--help)
 			print_help
-			exit 0
-			;;
-		--force-python3)
-			force_use_python_3_system_wide
 			exit 0
 			;;
 		-s|--short)
