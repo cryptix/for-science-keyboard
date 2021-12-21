@@ -221,6 +221,8 @@ then
 	cat "$projvars_file_src" >> "$projvars_file_gen"
 fi
 
+return
+
 echo "(Re-)Loading project meta-data ..."
 
 # This makes sure that when loading variables from the file below, they are exported
